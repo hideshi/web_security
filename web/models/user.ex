@@ -38,4 +38,13 @@ defmodule WebSecurity.User do
     |> unique_constraint(:name)
     |> unique_constraint(:email)
   end
+
+  before_insert :hash_password
+  before_update :hash_password
+  def hash_password(changeset) do
+    password_hash = changeset
+    |> Ecto.Changeset.get_field(:password)
+    |> Comeonin.Bcrypt.hashpwsalt()
+    Ecto.Changeset.put_change(changeset, :password_hash, password_hash)
+  end
 end
