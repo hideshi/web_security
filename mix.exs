@@ -19,7 +19,7 @@ defmodule WebSecurity.Mixfile do
   def application do
     [mod: {WebSecurity, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger,
-                    :phoenix_ecto, :postgrex, :tzdata]]
+                    :phoenix_ecto, :postgrex]]
   end
 
   # Specifies which paths to compile per environment.
@@ -37,7 +37,6 @@ defmodule WebSecurity.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:comeonin, "~> 1.6.0"},
      {:mailgun, "~> 0.1.2"},
-     {:timex, "~> 1.0.0-rc2"},
      {:cowboy, "~> 1.0"}]
   end
 
