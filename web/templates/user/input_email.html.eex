@@ -1,0 +1,6 @@
+<h2>Send an Email for Changing Password</h2>
+
+<%= render "email_form.html", changeset: @changeset,
+                        action: user_path(@conn, :send_confirmation) %>
+
+<%= link "Back", to: user_path(@conn, :login) %>

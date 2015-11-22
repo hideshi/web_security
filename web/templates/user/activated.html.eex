@@ -1,0 +1,3 @@
+<h2>Activated</h2>
+
+<%= link "Login", to: user_path(@conn, :login) %>

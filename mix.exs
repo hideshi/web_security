@@ -35,7 +35,8 @@ defmodule WebSecurity.Mixfile do
      {:postgrex, ">= 0.0.0"},
      {:phoenix_html, "~> 2.1"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:comeonin, "~> 1.0"},
+     {:comeonin, "~> 1.6.0"},
+     {:mailgun, "~> 0.1.2"},
      {:cowboy, "~> 1.0"}]
   end
 

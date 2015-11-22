@@ -1,4 +1,4 @@
-<%= form_for @changeset, @action, fn f -> %>
+<%= form_for @changeset, user_path(@conn, :authenticate), fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
       <p>Oops, something went wrong! Please check the errors below:</p>
@@ -16,21 +16,13 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :email, "Email", class: "control-label" %>
-    <%= text_input f, :email, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
     <%= label f, :password, "Password", class: "control-label" %>
     <%= password_input f, :password, class: "form-control" %>
   </div>
 
   <div class="form-group">
-    <%= label f, :password_confirmation, "Confirm Password", class: "control-label" %>
-    <%= password_input f, :password_confirmation, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= submit "Submit", class: "btn btn-primary" %>
+    <%= submit "Login", class: "btn btn-primary" %>
   </div>
 <% end %>
+<%= link "Register", to: user_path(@conn, :register) %>
+<%= link "Forgot password", to: user_path(@conn, :forgot_password) %>

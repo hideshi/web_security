@@ -6,9 +6,8 @@ defmodule WebSecurity.Repo.Migrations.CreateUser do
       add :name, :string
       add :email, :string
       add :password_hash, :string
-      add :is_in_registration, :boolean, default: true
-      add :registration_limit, :datetime
       add :is_active, :boolean, default: false
+      add :registration_limit, :datetime
       add :login_error, :integer, default: 0
       add :login_denial_limit, :datetime
       add :onetime_token, :string
