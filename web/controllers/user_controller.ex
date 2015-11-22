@@ -2,56 +2,71 @@ defmodule WebSecurity.UserController do
   use WebSecurity.Web, :controller
 
   alias WebSecurity.User
+  alias WebSecurity.Mailer
 
   plug :scrub_params, "user" when action in [:create, :update]
 
   def login(conn, _params) do
-    changeset = User.changeset(%User{})
+    changeset = User.login_changeset(%User{})
     render(conn, "login.html", changeset: changeset)
   end
 
-  def authenticate(conn, _params) do
-    changeset = User.changeset(%User{})
-    render(conn, "top.html", changeset: changeset)
+  def authenticate(conn, %{"user" => user_params}) do
+    changeset = User.login_changeset(%User{}, user_params)
+    case changeset do
+      %Ecto.Changeset{valid?: false} ->
+        conn
+        |> put_flash(:error, "Failed user authentication.")
+        |> redirect(to: user_path(conn, :login))
+      _ ->
+        conn
+        |> put_flash(:info, "User authenticated successfully.")
+        |> redirect(to: user_path(conn, :login))
+    end
   end
 
   def logout(conn, _params) do
-    changeset = User.changeset(%User{})
-    render(conn, "login.html", changeset: changeset)
+    conn
+    |> redirect(to: user_path(conn, :login))
   end
 
   def register(conn, _params) do
-    changeset = User.changeset(%User{})
+    changeset = User.registration_changeset(%User{})
     render(conn, "register.html", changeset: changeset)
   end
 
   def send_activation(conn, %{"user" => user_params}) do
-    changeset = User.changeset(%User{}, user_params)
+    changeset = User.registration_changeset(%User{}, user_params)
 
-    #WebSecurity.Mailer.send_email("hideshi.ogoshi@gmail.com", "Registered your account", "Please activate now")
     case Repo.insert(changeset) do
       {:ok, %User{email: email}} ->
-        conn
-        |> put_flash(:info, "User created successfully.")
-        |> render("sent_activation.html", changeset: changeset)
+        case Mailer.send_email("hideshi.ogoshi@gmail.com", "Registered your account", "Please activate now") do
+          {:ok, status} ->
+            conn
+            |> put_flash(:info, "Email have sent successfully.")
+            |> render("sent_activation.html", changeset: changeset)
+          _ ->
+            conn
+            |> put_flash(:error, "Email haven't sent because of error.")
+            |> render("sent_activation.html", changeset: changeset)
+        end
       {:error, changeset} ->
         render(conn, "register.html", changeset: changeset)
     end
   end
 
   def activate(conn, _params) do
-    changeset = User.changeset(%User{})
-    render(conn, "activated.html", changeset: changeset)
+    render(conn, "activated.html")
   end
 
   def forgot_password(conn, _params) do
-    changeset = User.changeset(%User{})
+    changeset = User.email_changeset(%User{})
     render(conn, "input_email.html", changeset: changeset)
   end
 
-  def send_confirmation(conn, _params) do
-    changeset = User.changeset(%User{})
-    render(conn, "sent_confirmation.html", changeset: changeset)
+  def send_confirmation(conn, %{"user" => user_params}) do
+    changeset = User.email_changeset(%User{}, user_params)
+    render(conn, "sent_confirmation.html")
   end
 
 #  def index(conn, _params) do

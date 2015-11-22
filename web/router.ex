@@ -16,7 +16,7 @@ defmodule WebSecurity.Router do
   scope "/", WebSecurity do
     pipe_through :browser # Use the default browser stack
 
-    get "/", UserController, :login
+    #get "/", UserController, :login
     #resources "/users", UserController
     get "/users/login", UserController, :login
     post "/users/authenticate", UserController, :authenticate
