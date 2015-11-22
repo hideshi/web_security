@@ -22,6 +22,8 @@ defmodule WebSecurity.Web do
 
       import Ecto.Changeset
       import Ecto.Query, only: [from: 1, from: 2]
+
+      require Logger
     end
   end
 
@@ -34,6 +36,8 @@ defmodule WebSecurity.Web do
       import Ecto.Query, only: [from: 1, from: 2]
 
       import WebSecurity.Router.Helpers
+
+      require Logger
     end
   end
 
@@ -54,6 +58,9 @@ defmodule WebSecurity.Web do
   def router do
     quote do
       use Phoenix.Router
+
+      alias WebSecurity.AuthPlug
+      alias WebSecurity.Repo
     end
   end
 
@@ -64,6 +71,14 @@ defmodule WebSecurity.Web do
       alias WebSecurity.Repo
       import Ecto.Model
       import Ecto.Query, only: [from: 1, from: 2]
+    end
+  end
+
+  def plug do
+    quote do
+      import Plug.Conn
+      alias WebSecuriry.User
+      require Logger
     end
   end
 
