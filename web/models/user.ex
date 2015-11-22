@@ -35,17 +35,15 @@ defmodule WebSecurity.User do
     |> validate_length(:password, min: 8)
     |> validate_length(:password, max: 100)
     |> validate_format(:password, ~r/[A-Za-z0-9!#\$%&\\\{\}\[\]_\.\^\*':\(\)\+\?;"=,~<>\|]/)
-    |> validate_length(:password_confirmation, min: 8)
-    |> validate_length(:password_confirmation, max: 100)
-    |> validate_format(:password_confirmation, ~r/[A-Za-z0-9!#\$%&\\\{\}\[\]_\.\^\*':\(\)\+\?;"=,~<>\|]/)
     |> validate_confirmation(:password)
     |> unique_constraint(:name)
     |> unique_constraint(:email)
+    |> set_registration_limit
   end
 
   def set_registration_limit(changeset) do
     case changeset do
-      #%Ecto.Changeset{valid?: true, changes: %{is_active: false}} -> put_change(changeset, :registration_limit, )
+      %Ecto.Changeset{valid?: true, changes: %{is_active: false}} -> put_change(changeset, :registration_limit, )
       _ -> changeset
     end
   end
