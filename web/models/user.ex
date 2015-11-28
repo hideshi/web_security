@@ -1,5 +1,6 @@
 defmodule WebSecurity.User do
   use WebSecurity.Web, :model
+  use Timex
 
   schema "users" do
     field :name, :string
@@ -87,8 +88,7 @@ defmodule WebSecurity.User do
 
   def set_registration_limit(changeset) do
     case changeset do
-      %Ecto.Changeset{valid?: true} -> put_change(changeset, :registration_limit, Ecto.DateTime.from_erl(:calendar.universal_time()))
-      #%Ecto.Changeset{valid?: true} -> put_change(changeset, :registration_limit, Timex.Date.now |> Timex.Date.shift(days: 1) |> DateConvert.to_erlang_datetime)
+      %Ecto.Changeset{valid?: true} -> put_change(changeset, :registration_limit, Date.now |> Date.shift(days: 1) |> DateConvert.to_erlang_datetime |> Ecto.DateTime.from_erl)
       _ -> changeset
     end
   end
